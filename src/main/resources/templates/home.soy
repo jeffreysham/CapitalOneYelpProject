@@ -1,0 +1,128 @@
+{namespace yelp.home}
+
+{template .main}
+{call yelp.base}
+  {param content kind="html"}
+    {call .initialContent}{/call}
+  {/param}
+  {param moreScripts kind="html"}
+    <script type="text/javascript">
+      {literal}
+        $(document).ready(function() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setLocation);
+          }
+
+          function setLocation(position) {
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+          }
+        });
+      {/literal}
+    </script>
+  {/param}
+{/call}
+{/template}
+
+{template .initialContent}
+<div class="container">
+  <div class="row text-center gray">
+    <h2>Restaurant Finder</h2>
+    <h4>
+      Find the food you've been craving for!<br>
+      Type a cuisine in the search box or simply click the search button.<br>
+      Then, click one of the photos to discover your next favorite restaurant!
+    </h4>
+  </div>
+  <div class="row text-center white">
+    <form action="/search" method="post">
+      <input type="text" placeholder="Search..." name="term" class="search-box">
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
+      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+</div>
+{/template}
+
+/**
+ * @param photos
+ */
+{template .search}
+{call yelp.base}
+  {param content kind="html"}
+    {call .initialContent}{/call}
+    {call .photoTable data="all"}{/call}
+  {/param}
+  {param moreScripts kind="html"}
+    <script type="text/javascript">
+      {literal}
+        $(document).ready(function() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setLocation);
+          }
+
+          function setLocation(position) {
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+          }
+
+          $('.photo').click(function() {
+            var restaurantId = $(this).data("restaurantId");
+            $.get('/search/' + restaurantId, function(data){
+              $('#restaurant-modal').modal('hide');
+
+              let json = $.parseJSON(data);
+              $('#restaurant-map').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + json.latitude + ',' + json.longitude + '&zoom=15&key=<api key>');
+              $('#restaurant-name').text(json.name);
+              $('#restaurant-url').attr('href', json.url);
+              let details = json.address + ' <br> ' + 'Price: ' + json.price + ' <br> ' + 'Rating: ' + json.rating + '/5';
+              $('#restaurant-details').html(details);
+              $('#restaurant-modal').modal('show');
+            })
+          });
+        });
+      {/literal}
+    </script>
+  {/param}
+{/call}
+{/template}
+
+/**
+ * @param photos
+ */
+{template .photoTable}
+<div class="container">
+  <div class="row gray">
+    <div class="col-md-6">
+      {foreach $key in keys($photos)}
+        {if index($key) % 2 == 1}
+          <img src="{$key}" class="photo" data-restaurant-id="{$photos[$key]}">
+        {/if}
+      {/foreach}
+    </div>
+    <div class="col-md-6">
+      {foreach $key in keys($photos)}
+        {if index($key) % 2 == 0}
+          <img src="{$key}" class="photo" data-restaurant-id="{$photos[$key]}">
+        {/if}
+      {/foreach}
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="restaurant-modal" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <a id="restaurant-url" target="_blank"><h4 class="modal-title" id="restaurant-name"></h4></a>
+      </div>
+      <div class="modal-body">
+        <p id="restaurant-details"></p>
+        <iframe id="restaurant-map" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+{/template}
