@@ -23,6 +23,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             port(getHerokuAssignedPort());
+            staticFiles.location("/public");
+
             get("/", (req, res) -> renderHomeScreen());
             get("/index", (req, res) -> renderHomeScreen());
             get("/search", (req, res) -> renderHomeScreen());

@@ -18,6 +18,7 @@ import java.util.List;
 public class YelpApi {
     private static final String API_TOKEN = "Bearer <api token>";
     private static final String URL_PREFIX = "https://api.yelp.com/v3/businesses/";
+    private static final String BASE_SEARCH = URL_PREFIX + "search?limit=10&open_now=true";
     private final OkHttpClient client;
 
     public YelpApi() {
@@ -29,7 +30,9 @@ public class YelpApi {
     }
 
     public List<YelpBusiness> searchBusinesses(String term, double latitude, double longitude) {
-        String url = URL_PREFIX + "search?latitude=" + latitude + "&longitude=" + longitude + "&limit=10";
+        String url = BASE_SEARCH +
+                "&latitude=" + latitude +
+                "&longitude=" + longitude;
         if (!Strings.isNullOrEmpty(term)) {
             url += "&term=" + term;
         } else {

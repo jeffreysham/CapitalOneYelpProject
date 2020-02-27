@@ -10,12 +10,30 @@
       {literal}
         $(document).ready(function() {
           if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(setLocation);
+            navigator.geolocation.getCurrentPosition(setLocation, showError, {timeout:10000, enableHighAccuracy: true, maximumAge:10000});
           }
 
           function setLocation(position) {
             $('#latitude').val(position.coords.latitude);
             $('#longitude').val(position.coords.longitude);
+            $('#search-button').prop("disabled", false);
+          }
+
+          function showError(error) {
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+              case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred with retrieving Geolocation");
+                break;
+            }
           }
         });
       {/literal}
@@ -31,7 +49,8 @@
     <h4>
       Find the food you've been craving for!<br>
       Type a cuisine in the search box or simply click the search button.<br>
-      Then, click one of the photos to discover your next favorite restaurant!
+      Then, click one of the photos to discover your next favorite restaurant!<br><br>
+      Note: If there is a problem with retrieving your browser's location information, you won't be able to find any restaurants.
     </h4>
   </div>
   <div class="row text-center white">
@@ -39,7 +58,7 @@
       <input type="text" placeholder="Search..." name="term" class="search-box">
       <input type="hidden" name="latitude" id="latitude">
       <input type="hidden" name="longitude" id="longitude">
-      <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+      <button type="submit" class="search-button" id="search-button" disabled><i class="fa fa-search"></i></button>
     </form>
   </div>
 </div>
@@ -59,12 +78,30 @@
       {literal}
         $(document).ready(function() {
           if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(setLocation);
+            navigator.geolocation.getCurrentPosition(setLocation, showError, {timeout:10000, enableHighAccuracy: true, maximumAge:10000});
           }
 
           function setLocation(position) {
             $('#latitude').val(position.coords.latitude);
             $('#longitude').val(position.coords.longitude);
+            $('#search-button').prop("disabled", false);
+          }
+
+          function showError(error) {
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+              case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred with retrieving Geolocation");
+                break;
+            }
           }
 
           $('.photo').click(function() {
