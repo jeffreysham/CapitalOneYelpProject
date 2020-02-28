@@ -17,6 +17,7 @@ public class YelpBusiness {
     private String url;
     private String price;
     private double rating;
+    private int numberOfClicks;
 
     public String getId() {
         return id;
@@ -88,6 +89,14 @@ public class YelpBusiness {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public int getNumberOfClicks() {
+        return numberOfClicks;
+    }
+
+    public void setNumberOfClicks(int numberOfClicks) {
+        this.numberOfClicks = numberOfClicks;
     }
 
     @Override

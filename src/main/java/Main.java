@@ -92,7 +92,11 @@ public class Main {
         YelpBusiness businessDetails = businessDetailsMap.get(id);
         if (businessDetails == null) {
             notFound("<html><body><h1>Business id not found</h1></body></html>");
+            return null;
         }
+
+        // Increase click count
+        businessDetails.setNumberOfClicks(businessDetails.getNumberOfClicks() + 1);
 
         JSONObject details = new JSONObject();
         details.put("name", businessDetails.getName());
@@ -102,6 +106,7 @@ public class Main {
         details.put("url", businessDetails.getUrl());
         details.put("latitude", businessDetails.getLatitude());
         details.put("longitude", businessDetails.getLongitude());
+        details.put("numClicks", businessDetails.getNumberOfClicks());
         return details.toString();
     }
 

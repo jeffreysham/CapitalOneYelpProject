@@ -113,7 +113,7 @@
               $('#restaurant-map').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + json.latitude + ',' + json.longitude + '&zoom=15&key=<api key>');
               $('#restaurant-name').text(json.name);
               $('#restaurant-url').attr('href', json.url);
-              let details = json.address + ' <br> ' + 'Price: ' + json.price + ' <br> ' + 'Rating: ' + json.rating + '/5';
+              let details = json.address + '<br>' + 'Price: ' + json.price + '<br>' + 'Rating: ' + json.rating + '/5' + '<br>' + 'Popularity: ' + json.numClicks + ' click(s)';
               $('#restaurant-details').html(details);
               $('#restaurant-modal').modal('show');
             })
