@@ -113,7 +113,13 @@
               $('#restaurant-map').attr('src', 'https://www.google.com/maps/embed/v1/place?q=' + json.latitude + ',' + json.longitude + '&zoom=15&key=<api key>');
               $('#restaurant-name').text(json.name);
               $('#restaurant-url').attr('href', json.url);
-              let details = json.address + '<br>' + 'Price: ' + json.price + '<br>' + 'Rating: ' + json.rating + '/5' + '<br>' + 'Popularity: ' + json.numClicks + ' click(s)';
+              let details = json.address + '<br>' +
+                  'Price: ' + json.price + '<br>' +
+                  'Rating: ' + json.rating + '/5' + '<br>' +
+                  'Total Clicks: ' + json.numClicks + ' click(s)';
+              if (json.isTopValue) {
+                 details = details + '<br>' + 'Top 10 most popular restaurants in last 5 days';
+              }
               $('#restaurant-details').html(details);
               $('#restaurant-modal').modal('show');
             })

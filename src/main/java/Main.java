@@ -19,6 +19,7 @@ import spark.Request;
  */
 public class Main {
     private static final Map<String, YelpBusiness> businessDetailsMap = new HashMap<>();
+    private static final TopValuesWithinNDays topValues = new TopValuesWithinNDays(5);
 
     public static void main(String[] args) {
         try {
@@ -95,8 +96,9 @@ public class Main {
             return null;
         }
 
-        // Increase click count
+        topValues.addValue(id);
         businessDetails.setNumberOfClicks(businessDetails.getNumberOfClicks() + 1);
+        boolean isTopValue = topValues.isTopKValue(id, 10);
 
         JSONObject details = new JSONObject();
         details.put("name", businessDetails.getName());
@@ -107,6 +109,7 @@ public class Main {
         details.put("latitude", businessDetails.getLatitude());
         details.put("longitude", businessDetails.getLongitude());
         details.put("numClicks", businessDetails.getNumberOfClicks());
+        details.put("isTopValue", isTopValue);
         return details.toString();
     }
 
